@@ -1,35 +1,49 @@
-# chainer-char-rnn
-karpathy's [char-rnn](https://github.com/karpathy/char-rnn) implementation by [Chainer](https://github.com/pfnet/chainer)
+## Setup
 
-
-## Requirement
-- [Chainer](https://github.com/pfnet/chainer)
+1. pyenvのインストール
+1. python2.7.9のインストール
 ```
-$ pip install chainer
-$ pip install chainer-cuda-deps
+pyenv install 2.7.9
+python local 2.7.9
+```
+
+1. Mecabのインストール
+```
+brew install mecab
+brew install mecab-ipadic
+```
+1. 必要に応じて辞書を拡張（https://qiita.com/ysk_1031/items/7f0cfb7e9e4c4b9129c9）
+1. cudaのインストール（https://developer.nvidia.com/cuda-downloads?target_os=MacOSX&target_arch=x86_64&target_version=1012&target_type=dmglocal）
+1. 依存ライブラリのインストール
+
+```
+pip install -r requirements.txt
 ```
 
 ## Train
-Start training the model using `train.py`, for example
-
+1. 学習データを以下に配置する
 ```
-$ python train.py
+data/dazai/input.txt
 ```
 
-The `--data_dir` flag specifies the dataset to use. By default it is set to `data/tinyshakespeare` which consists of a subset of works of Shakespeare.
-
-**Your own data**: If you'd like to use your own data create a single file `input.txt` and place it into a folder in `data/`. For example, `data/some_folder/input.txt`.
-
-
-
-## Sampling
-Given a checkpoint file (such as those written to cv) we can generate new text. For example:
+1. 学習させる
 ```
-$ python sample.py \
---vocabulary data/tinyshakespeare/vocab.bin \
---model cv/some_checkpoint.chainermodel \
---primetext some_text --gpu -1
+python train.py --data_dir data/dazai ¥
+--checkpoint_dir cv/dazai --rnn_size 1024 ¥
+--gpu -1 --enable_checkpoint False ¥
+data/dazai/input.txt
 ```
-## References
-- Original implementation: https://github.com/karpathy/char-rnn
-- Blog post: http://karpathy.github.io/2015/05/21/rnn-effectiveness/
+
+### output
+
+* data/dazai/vocab.bin
+* cv/dazai/charrnn_final.chainermodel
+* cv/dazai/loss.txt
+
+## Predict
+```
+python sample.py \
+--vocabulary data/dazai/vocab.bin \
+--model cv/dazai/charrnn_final.chainermodel \
+--primetext '宮島さん' --gpu -1
+```

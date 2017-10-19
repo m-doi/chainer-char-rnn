@@ -1,5 +1,7 @@
 *.npyc
 *.pyc
 .DS_Store
-
+cv/dazai/*.chainermodel
+cv/dazai/loss.txt
+data/dazai/vocab.bin
 !.gitkeep
